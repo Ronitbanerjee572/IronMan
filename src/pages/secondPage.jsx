@@ -17,11 +17,9 @@ const SecondPage = () => {
               <span className="text-iron-red">PLAYBOY.</span> PHILANTHROPIST.
             </h2> */}
             <p className="text-zinc-400 text-xl max-w-2xl leading-relaxed">
-              Tony Stark is more than just a man in a suit. He's a visionary who redefined 
-              global security and paved the way for a new era of technological advancement. 
-              From the Mark I in a cave to the Nano-tech Mark LXXXV, the evolution is absolute.
+              Work Under Progress...the final version will be realised soon
             </p>
-            <div className="grid grid-cols-2 gap-6 pt-10">
+            {/* <div className="grid grid-cols-2 gap-6 pt-10">
               <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl">
                 <h3 className="text-iron-gold text-3xl font-bold">85+</h3>
                 <p className="text-zinc-500 uppercase text-xs tracking-widest mt-1">Armors Built</p>
@@ -30,7 +28,7 @@ const SecondPage = () => {
                 <h3 className="text-arc-blue text-3xl font-bold">∞</h3>
                 <p className="text-zinc-500 uppercase text-xs tracking-widest mt-1">Clean Energy</p>
               </div>
-            </div>
+            </div> */}
           </div>
           
           <div className="flex-1 relative group">
