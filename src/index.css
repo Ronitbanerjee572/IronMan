@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  --color-iron-red: #d31f26;
+  --color-iron-gold: #fbca03;
+  --color-arc-blue: #0ae9ff;
+  --color-iron-dark: #0a0a0a;
+}
+
+:root {
+  background-color: #050505;
+  color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* Custom selection color */
+::selection {
+  background: #d31f26;
+  color: white;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #d31f26;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #fbca03;
+}
+
+/* Glassmorphism effects */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-red {
+  background: rgba(211, 31, 38, 0.05);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(211, 31, 38, 0.2);
+}
+
+/* Glowing effects */
+.glow-blue {
+  box-shadow: 0 0 30px rgba(10, 233, 255, 0.3);
+}
+
+.glow-red {
+  box-shadow: 0 0 40px rgba(211, 31, 38, 0.4);
+}
+
+
+
+
+/* Typography refinements */
+h1, h2, h3 {
+  letter-spacing: -0.05em;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.text-outline {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+  color: transparent;
+}
+
+/* Bright Iron Man Outline with Scanning HUD effect */
+.scan-outline {
+  /* Reduced brightness and increased contrast to 'choke' white fringes around hair */
+  filter: brightness(1.2) contrast(1.6) drop-shadow(0 0 12px rgba(10, 233, 255, 0.5));
+  mix-blend-mode: screen; /* Blends better as light on dark, ignoring black edges */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 40%,
+    black 50%,
+    rgba(0, 0, 0, 0.2) 60%,
+    transparent 100%
+  );
+  mask-size: 100% 200%;
+  animation: scan-loop 3s linear infinite;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 40%,
+    black 50%,
+    rgba(0, 0, 0, 0.2) 60%,
+    transparent 100%
+  );
+  -webkit-mask-size: 100% 200%;
+}
+
+@keyframes scan-loop {
+  0% { -webkit-mask-position: 0% 100%; mask-position: 0% 100%; }
+  100% { -webkit-mask-position: 0% -100%; mask-position: 0% -100%; }
+}

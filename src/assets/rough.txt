@@ -1,0 +1,19 @@
+<>
+      {/* <main className='h-screen w-full overflow-hidden'>
+        <center className='translate-y-[120px]'>
+          <img src={background} alt="background" className='w-full h-screen object-cover' />
+
+        </center>
+      </main> */}
+
+      <script src="https://framer.com/m/HoverMaskReveal-prod-GdFmJi.js"></script>
+    </>
+
+
+    <img 
+        src={background} 
+        alt="base background" 
+        className='absolute inset-0 w-full h-full object-cover z-0' 
+      />
+
+      https://framer.university/resources/crazy-hover-mask-reveal-in-framer
