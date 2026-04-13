@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import LiquidMask from '../components/helmateanimation';
 import Waves from '../component/Waves';
 import Signature from '../component/Signature';
@@ -12,29 +12,39 @@ import outlineImage from "../assets/HeroImages/Firefly (9)-Photoroom.png";
 
 const Hero = () => {
   const containerRef = useRef(null);
+  const [isInteractive, setIsInteractive] = useState(true);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   });
 
+  // Turn off interaction (hover effect) once the user has scrolled past 25%
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.25 && isInteractive) {
+      setIsInteractive(false);
+    } else if (latest <= 0.25 && !isInteractive) {
+      setIsInteractive(true);
+    }
+  });
+
   // TIMING PHASES:
-  // Hero: shrinks and turns gray
-  const heroScale = useTransform(scrollYProgress, [0, 0.4], [1, 0.35]); // Shrunken like the reference image
-  const heroFilter = useTransform(scrollYProgress, [0, 0.4], ["grayscale(0%) brightness(1)", "grayscale(100%) brightness(0.7)"]);
+  // Hero: shrinks and turns gray faster
+  const heroScale = useTransform(scrollYProgress, [0, 0.25], [1, 0.35]); // Shrunken like the reference image quickly
+  const heroGrayOpacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]); // Replaces heroFilter logic for GPU performance
   const heroOpacity = useTransform(scrollYProgress, [0.8, 1], [1, 0]);
   
   // Signature: stays large and draws over the shrunken hero
-  const signatureProgress = useTransform(scrollYProgress, [0.35, 0.8], [0, 1]);
-  const signatureScale = useTransform(scrollYProgress, [0.35, 0.5], [1.5, 1.2]); // Making it larger than the portrait
+  const signatureProgress = useTransform(scrollYProgress, [0.2, 0.7], [0, 1]);
+  const signatureScale = useTransform(scrollYProgress, [0.2, 0.5], [1.5, 1.2]); // Making it larger than the portrait
 
   // Scrolling Text Opacity: Starts at 0% at absolute top, fades in to 40% as we scroll
-  const scrollingTextOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 0.4]);
+  const scrollingTextOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 0.4]);
 
   const transparentBase = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
   return (
-    <section ref={containerRef} className="relative h-[400vh] bg-[#0c0c0c]">
+    <section ref={containerRef} className="relative h-[250vh] bg-[#0c0c0c]">
       
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
         
@@ -60,13 +70,13 @@ const Hero = () => {
         <motion.div 
           style={{ 
             scale: heroScale, 
-            filter: heroFilter, 
             opacity: heroOpacity,
           }}
-          className="relative z-10 w-[80%] h-[80%] flex items-center justify-center shadow-[0_0_100px_rgba(0,0,0,0.8)]"
+          className="relative z-10 w-[80%] h-[80%] flex items-center justify-center shadow-[0_0_100px_rgba(0,0,0,0.8)] will-change-transform"
         >
           <div className='relative w-full h-full rounded-2xl overflow-hidden border border-white/5'>
-            <div className="absolute inset-0 z-10">
+            {/* Render images statically and overlay fade to eliminate Safari/Chrome scroll lag */}
+            <div className="absolute inset-0 z-10 pointer-events-none">
               <img 
                 src={background} 
                 alt="Hero Background" 
@@ -82,7 +92,14 @@ const Hero = () => {
               />
             </div>
 
-            <div className='absolute inset-0 z-30 h-[100%]'>
+            {/* GPU Hardware-Optimized Grayscale Overlay */}
+            <motion.div 
+              style={{ opacity: heroGrayOpacity }}
+              className="absolute inset-0 z-25 pointer-events-none backdrop-grayscale backdrop-brightness-75 bg-black/10 will-change-opacity"
+            />
+
+            {/* Hover Mask layer disabled when shrunk */}
+            <div className={`absolute inset-0 z-30 h-[100%] transition-opacity duration-300 ${isInteractive ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}>
               <LiquidMask 
                 imageBase={{ src: transparentBase }} 
                 imageHover={{ src: hoverImage }}

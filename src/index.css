@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'IronManOfWar';
+  src: url('./assets/font/IronManOfWar2Ncv-E85l.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-iron-red: #d31f26;
   --color-iron-gold: #fbca03;
@@ -10,7 +18,7 @@
 :root {
   background-color: #050505;
   color: #ffffff;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'IronManOfWar', 'Inter', system-ui, -apple-system, sans-serif;
   scroll-behavior: smooth;
 }
 
@@ -62,9 +70,10 @@
 
 /* Typography refinements */
 h1, h2, h3 {
-  letter-spacing: -0.05em;
-  font-weight: 900;
+  letter-spacing: 0.05em;
+  font-weight: normal;
   text-transform: uppercase;
+  font-family: 'IronManOfWar', sans-serif;
 }
 
 .text-outline {
