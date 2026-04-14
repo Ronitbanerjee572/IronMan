@@ -51,3 +51,6 @@ The quiet bedtime moment with his daughter, Morgan. This simple phrase became th
 
 "And I... am... Iron Man" (The Final Snap) (Avengers: Endgame, 2019)
 The definitive Iron Man moment. Kneeling in the dirt, Tony looks Thanos in the eye, steals the Infinity Stones with his nanotech, and says, "And I... am... Iron Man" one last time. It’s the ultimate heroic sacrifice that ended an era.
+
+
+in the second last card in the ironManArmory.jsx which is the 4th page where we are displaying the mark 85 model, remove the image and add the mark85 3d model .glb file in src/3Dmodels folder, keep it static and as i scroll to the 5th page the image comes out of the card gets bigger and rotates a 360 degree at the same time and settels in a box in the 5th page

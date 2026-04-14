@@ -22,6 +22,53 @@ const MobileScrollLock = () => {
     };
   }, [isLocked]);
 
+  // --- Touch-to-Hover Bridge ---
+  // When scroll lock is active, translate touch events into synthetic MouseEvents.
+  // LiquidMask already listens to window 'mousemove', so this bridges finger
+  // sliding into the exact same liquid hover effect seen on desktop — no changes
+  // needed to the animation component itself.
+  useEffect(() => {
+    if (!isLocked) return; // Only active while the scroll is locked
+
+    // Helper: dispatch a synthetic MouseEvent at the touch point's screen coordinates
+    const dispatchMouse = (type, touch) => {
+      const event = new MouseEvent(type, {
+        bubbles: true,
+        cancelable: true,
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+        screenX: touch.screenX,
+        screenY: touch.screenY,
+      });
+      // Fire on window — matches where LiquidMask's onMove listener is registered
+      window.dispatchEvent(event);
+    };
+
+    // touchstart → fire an initial mousemove so the blob appears on first contact
+    const onTouchStart = (e) => {
+      const touch = e.touches[0];
+      if (touch) dispatchMouse('mousemove', touch);
+    };
+
+    // touchmove → continuously update the blob position as the finger slides
+    const onTouchMove = (e) => {
+      // Prevent any residual browser scroll while locked (belt-and-suspenders)
+      e.preventDefault();
+      const touch = e.touches[0];
+      if (touch) dispatchMouse('mousemove', touch);
+    };
+
+    // { passive: false } on touchmove is required for e.preventDefault() to work
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: false });
+
+    // Clean up listeners when lock is toggled off or component unmounts
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchmove', onTouchMove);
+    };
+  }, [isLocked]);
+
   return (
     <motion.div 
       style={{ opacity: visibilityOpacity, scale: visibilityScale, pointerEvents }}

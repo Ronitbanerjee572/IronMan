@@ -31,7 +31,7 @@ const suitsData = [
 
 const SuitCard = ({ suit }) => {
   return (
-    <motion.div
+    <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
@@ -87,23 +87,23 @@ const IronManArmory = () => {
     <section className="bg-black min-h-screen py-32 px-6 md:px-12 relative overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#1a1a1a_0%,#000_100%)] z-0" />
-
+      
       {/* Scanning Line overlay */}
       <div className="absolute inset-0 h-full w-full pointer-events-none z-10 opacity-[0.03]">
-        <div className="h-full w-full bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,#fff_2px,#fff_3px)]" />
+         <div className="h-full w-full bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,#fff_2px,#fff_3px)]" />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-20">
         {/* Header Section */}
         <div className="mb-24 text-left border-l-2 border-[#ff0019] pl-6">
-          <motion.p
+          <motion.p 
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             className="text-[#ff0019] font-mono text-xs tracking-[0.4em] uppercase mb-4"
           >
             Tactical Suit Database // Armory v.4.0
           </motion.p>
-          <motion.h2
+          <motion.h2 
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
@@ -115,104 +115,9 @@ const IronManArmory = () => {
 
         {/* The Grid of Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12">
-          {suitsData.map((suit) =>
-            suit.id === 85 ? (
-              // ------ Mark LXXXV special card ------
-              <motion.div
-                key={suit.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -10 }}
-                className="relative group p-[3px] rounded-[30px] overflow-hidden bg-zinc-800 transition-all duration-300"
-              >
-                {/* Glowing red neon border on hover */}
-                <div className="absolute inset-0 bg-transparent border-[3px] border-[#ff0019]/30 group-hover:border-[#ff0019] rounded-[30px] transition-colors duration-500 z-20 pointer-events-none" />
-
-                {/* Special gold accent for the final suit */}
-                <div className="absolute top-3 left-3 z-30">
-                  <span className="text-[#fbca03] font-mono text-[9px] uppercase tracking-[0.3em] opacity-80">★ Final Suit</span>
-                </div>
-
-                <div
-                  className="relative bg-[#0a0a0a] rounded-[27px] overflow-hidden aspect-[1/1.2] flex flex-col items-center justify-center p-0"
-                  style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 85%, 70% 85%, 55% 100%, 0% 100%)' }}
-                >
-                  {/* Static Image viewer */}
-                  <div className="w-full h-[80%] relative flex items-center justify-center p-4">
-                    <img 
-                      src={suitAssets[suit.id]} 
-                      alt={suit.mark}
-                      className="h-full w-auto object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover:drop-shadow-[0_0_25px_rgba(251,202,3,0.5)] transition-all duration-500"
-                    />
-                  </div>
-
-                  {/* Text content — same layout as regular SuitCard */}
-                  <div className="w-full text-left px-6 mt-2 flex flex-col justify-start pb-6">
-                    <h3 className="text-white text-3xl font-black uppercase italic tracking-tighter leading-none mb-1">
-                      Mark LXXXV
-                    </h3>
-                    <p className="text-zinc-500 font-mono text-[10px] uppercase tracking-widest">
-                      Avengers: Endgame (2019)
-                    </p>
-                    <p className="text-zinc-400 text-[11px] font-light mt-2 line-clamp-2 max-w-[80%]">
-                      The final nanotech suit.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Bottom-right corner label */}
-                <div className="absolute bottom-2 right-4 text-right z-30">
-                  <span className="text-[#ff0019] font-mono text-[10px] uppercase tracking-tighter block opacity-60">Status</span>
-                  <span className="text-[#fbca03] font-mono text-xs font-bold uppercase leading-none">Legacy</span>
-                </div>
-              </motion.div>
-            ) : (
-              <SuitCard key={suit.id} suit={suit} />
-            )
-          )}
-
-          {/* View All / Redirect Card */}
-          <motion.button
-            onClick={() => window.location.href = '/armory'} // Assuming a route or simple redirect
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            whileHover={{ y: -10 }}
-            className="relative group p-[3px] rounded-[30px] overflow-hidden bg-zinc-800 transition-all duration-300 text-left"
-          >
-            <div className="absolute inset-0 bg-transparent border-[3px] border-[#ff0019]/10 group-hover:border-[#ff0019] rounded-[30px] transition-colors duration-500 z-20 pointer-events-none" />
-            
-            <div 
-              className="relative bg-gradient-to-br from-[#111] to-black rounded-[27px] overflow-hidden aspect-[1/1.2] flex flex-col items-center justify-center p-6"
-              style={{
-                clipPath: 'polygon(0% 0%, 100% 0%, 100% 85%, 70% 85%, 55% 100%, 0% 100%)'
-              }}
-            >
-              <div className="flex flex-col items-center justify-center space-y-4">
-                <div className="w-16 h-16 rounded-full border border-[#ff0019]/30 flex items-center justify-center group-hover:bg-[#ff0019]/10 transition-colors">
-                  <svg 
-                    width="24" height="24" viewBox="0 0 24 24" fill="none" 
-                    stroke="#ff0019" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                    className="group-hover:translate-x-1 transition-transform"
-                  >
-                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                  </svg>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-white text-2xl font-black uppercase italic tracking-tighter">View Full</h3>
-                  <p className="text-[#ff0019] font-mono text-[10px] uppercase tracking-widest mt-1">Database Access</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute bottom-2 right-4 text-right z-30">
-              <span className="text-[#ff0019] font-mono text-[10px] uppercase tracking-tighter block opacity-60">Action</span>
-              <span className="text-white font-mono text-xs font-bold uppercase group-hover:text-[#ff0019] transition-colors leading-none">
-                Initialize
-              </span>
-            </div>
-          </motion.button>
+          {suitsData.map((suit) => (
+            <SuitCard key={suit.id} suit={suit} />
+          ))}
         </div>
       </div>
     </section>

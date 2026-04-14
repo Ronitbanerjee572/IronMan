@@ -6,6 +6,7 @@ import IronManArmory from './pages/IronManArmory';
 import MobileScrollLock from './component/MobileLock';
 import CardNav from './component/CardNav';
 import logo from "./assets/HeroImages/hero-helmet-outline.png";
+import Footer from './component/Footer';
 
 const navItems = [
   { label: 'ARMORY', link: '#armory' },
@@ -60,10 +61,15 @@ function App() {
       
       <Hero />
       <SecondPage />
-      {/* <IronManArmory /> */}
-      
+
+
+      {/* Fourth Page - Armory inventory */}
+      <IronManArmory />
+
       {/* Mobile-only interaction lock */}
       <MobileScrollLock />
+
+      <Footer />
     </main>
   );
 }

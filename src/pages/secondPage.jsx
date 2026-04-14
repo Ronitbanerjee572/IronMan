@@ -12,6 +12,17 @@ import captain from '../assets/memoryGallery/captain.webp';
 import love3000 from '../assets/memoryGallery/3000.jpg';
 import finalSnap from '../assets/memoryGallery/finalsnap-2.webp';
 
+// Custom hook to detect mobile viewport (< 768px)
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return isMobile;
+};
+
 const galleryData = [
   {
     id: 1,
@@ -102,7 +113,69 @@ const getLayoutStyles = (index) => {
   return layouts[index % layouts.length];
 };
 
-const HorizontalGallery = () => {
+// --- Mobile: Vertical card stack with scroll-driven fade-in per card ---
+const MobileMemoryCard = ({ item, index }) => {
+  const cardRef = useRef(null);
+
+  // Each card fades + slides up as it enters the viewport
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["0.1 1", "0.4 1"],
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [60, 0]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      style={{ opacity, y }}
+      className="w-full mb-16 px-4"
+    >
+      {/* Full-width image */}
+      <div className="w-full overflow-hidden rounded-sm shadow-2xl mb-4">
+        <img
+          src={item.img}
+          alt=""
+          className="w-full h-auto object-cover opacity-90"
+        />
+      </div>
+
+      {/* Red label / title */}
+      <div className="text-[10px] text-red-500 uppercase tracking-[0.3em] font-mono font-bold mb-2">
+        {item.title}
+      </div>
+
+      {/* Description text */}
+      <div className="text-sm text-zinc-300 font-light leading-relaxed font-sans">
+        {item.description}
+      </div>
+
+      {/* Decorative separator line */}
+      <div className="mt-6 w-12 h-px bg-red-600 opacity-40" />
+    </motion.div>
+  );
+};
+
+// Mobile gallery: simple vertical scroll stack, no horizontal magic
+const MobileGallery = () => (
+  <section className="bg-[#050505] pt-8 pb-16">
+    {/* Section heading */}
+    <div className="px-4 mb-10">
+      <p className="text-[10px] text-red-500 uppercase tracking-[0.4em] font-mono font-bold mb-1">
+        Memory Archive
+      </p>
+      <div className="w-16 h-px bg-red-600 opacity-40" />
+    </div>
+
+    {galleryData.map((item, index) => (
+      <MobileMemoryCard key={item.id} item={item} index={index} />
+    ))}
+  </section>
+);
+
+// --- Desktop: Original horizontal parallax gallery (unchanged) ---
+const DesktopGallery = () => {
   const targetRef = useRef(null);
   const scrollRef = useRef(null);
   const [scrollRange, setScrollRange] = useState(0);
@@ -121,7 +194,7 @@ const HorizontalGallery = () => {
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end end"],
   });
 
   const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
@@ -132,7 +205,7 @@ const HorizontalGallery = () => {
         <motion.div ref={scrollRef} style={{ x }} className="flex h-full items-center">
           {galleryData.map((item, index) => {
             const layout = getLayoutStyles(index);
-            
+
             return (
               <div
                 key={item.id}
@@ -149,7 +222,7 @@ const HorizontalGallery = () => {
 
                 {/* Text Wrapper */}
                 <div className={`absolute ${layout.textWrapper} max-w-xs z-20`}>
-                   <div className="text-[10px] md:text-xs text-red-500 uppercase tracking-[0.3em] font-mono font-bold mb-2">
+                  <div className="text-[10px] md:text-xs text-red-500 uppercase tracking-[0.3em] font-mono font-bold mb-2">
                     {item.title}
                   </div>
                   <div className="text-sm md:text-base text-zinc-300 font-light leading-relaxed font-sans">
@@ -163,6 +236,13 @@ const HorizontalGallery = () => {
       </div>
     </section>
   );
+};
+
+// Wrapper: picks mobile or desktop gallery based on viewport width
+const HorizontalGallery = () => {
+  const isMobile = useIsMobile();
+  // Render mobile vertical stack on small screens, desktop parallax on large screens
+  return isMobile ? <MobileGallery /> : <DesktopGallery />;
 };
 
 const SecondPage = () => {
@@ -184,7 +264,7 @@ const SecondPage = () => {
       {/* Cinematic Intro Section with Scroll-Linked Animation */}
       <section 
         ref={introRef}
-        className="bg-[#050505] min-h-[110vh] flex items-center justify-center relative overflow-hidden px-8"
+        className="bg-[#050505] min-h-[110vh] flex items-center justify-center relative overflow-hidden px-4 md:px-8"
       >
         
         {/* Background Schematic Pattern */}
@@ -212,7 +292,7 @@ const SecondPage = () => {
             variants={{
               visible: { transition: { staggerChildren: 0.1 } }
             }}
-            className="text-4xl md:text-6xl lg:text-[75px] font-extrabold uppercase leading-tight tracking-tight font-sans"
+            className="text-2xl sm:text-4xl md:text-6xl lg:text-[75px] font-extrabold uppercase leading-tight tracking-tight font-sans"
           >
             <motion.span variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 }}} className="inline-block"><span className="text-[#bf9b30]">Redefining</span> <span className="text-zinc-200">The Genius.</span></motion.span><br />
 
